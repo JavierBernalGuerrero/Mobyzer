@@ -44,78 +44,87 @@
     <h1 style="text-align: center;">Mobile analyzer</h1>
     
     <%
-      ResultSet listado = s.executeQuery ("SELECT * "
+      ResultSet confirmacion = s.executeQuery ("SELECT * "
                                         + "FROM DISPOSITIVO d LEFT JOIN PROCESADOR p ON d.idCpu = p.idCpu "
                                         + "WHERE d.modelo LIKE '%" + request.getParameter("modelo") + "%'");
-    %>
-    <div>
-      <form action="editarResultado.jsp" method="post"> <!-- FORMULARIO PARA EDITAR -->
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Modelo</th>
-              <th>Marca</th>
-              <th>Velocidad</th>
-            </tr>
-          </thead>
-          <tfoot></tfoot>
-          <tbody>
-            <tr>
-              <td>
-                
-              <%
-                listado.first();
-                  String idDispositivo = listado.getString("idDispositivo");
-                  if (listado.getString("idDispositivo") == null) {
-                    idDispositivo = "";
+      
+      if (!confirmacion.next()) {
+        out.print("<script>document.location = \"mobyzerError.jsp\"</script>");
+      } else {
+        ResultSet listado = s.executeQuery ("SELECT * "
+                                          + "FROM DISPOSITIVO d LEFT JOIN PROCESADOR p ON d.idCpu = p.idCpu "
+                                          + "WHERE d.modelo LIKE '%" + request.getParameter("modelo") + "%'"); 
+      
+        %>
+        <div>
+          <form action="editarResultado.jsp" method="post"> <!-- FORMULARIO PARA EDITAR -->
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Modelo</th>
+                  <th>Marca</th>
+                  <th>Velocidad</th>
+                </tr>
+              </thead>
+              <tfoot></tfoot>
+              <tbody>
+                <tr>
+                  <td>
 
-                  }
+                  <%
+                    listado.first();
+                      String idDispositivo = listado.getString("idDispositivo");
+                      if (listado.getString("idDispositivo") == null) {
+                        idDispositivo = "";
 
-                  String modelo = listado.getString("modelo");
-                  if (listado.getString("modelo") == null) {
-                    modelo = "";
+                      }
 
-                  }
+                      String modelo = listado.getString("modelo");
+                      if (listado.getString("modelo") == null) {
+                        modelo = "";
 
-                  String marca = listado.getString("marca");
-                  if (listado.getString("marca") == null) {
-                    marca = "";
+                      }
 
-                  }
+                      String marca = listado.getString("marca");
+                      if (listado.getString("marca") == null) {
+                        marca = "";
 
-                  String velocidad = listado.getString("velocidad");
-                  if (listado.getString("velocidad") == null) {
-                    velocidad = "";
+                      }
 
-                  }
-                
-                  out.print("<input type='hidden' name='id' value='"
-                                                      + idDispositivo + "'>");
-                  out.print("<input type='text' disabled='disabled' value='" 
-                                                      + idDispositivo + "'></td>");
-                  out.print("<td><input type='text' required='required' name='modelo' value='" 
-                                                      + modelo + "'></td>");
-                  out.print("<td><input type='text' name='marca' value='" 
-                                                      + marca + "'></td>");
-                  
-                  out.print("<td class='celda'><select name='idCpu'>");
-                    String consulta1 = "";
-                    consulta1 = "SELECT idCpu, velocidad "
-                              + "FROM PROCESADOR ";
+                      String velocidad = listado.getString("velocidad");
+                      if (listado.getString("velocidad") == null) {
+                        velocidad = "";
 
-                    ResultSet listaCpu = s.executeQuery (consulta1);
-                    
-                    out.print("<option selected='selected' disabled='disabled'>" + velocidad + "</option>");
-                      
-                    while (listaCpu.next()) {
-                      out.print("<option value='" + listaCpu.getString("idCpu") +"'>" 
-                                                  + listaCpu.getString("velocidad") + "</option>");
-                    }
-                  out.print("</select></td>");
+                      }
 
-                conexion.close();
-              %>
+                      out.print("<input type='hidden' name='id' value='"
+                                                          + idDispositivo + "'>");
+                      out.print("<input type='text' disabled='disabled' value='" 
+                                                          + idDispositivo + "'></td>");
+                      out.print("<td><input type='text' required='required' name='modelo' value='" 
+                                                          + modelo + "'></td>");
+                      out.print("<td><input type='text' name='marca' value='" 
+                                                          + marca + "'></td>");
+
+                      out.print("<td class='celda'><select name='idCpu'>");
+                        String consulta1 = "";
+                        consulta1 = "SELECT idCpu, velocidad "
+                                  + "FROM PROCESADOR ";
+
+                        ResultSet listaCpu = s.executeQuery (consulta1);
+
+                        out.print("<option selected='selected' disabled='disabled'>" + velocidad + "</option>");
+
+                        while (listaCpu.next()) {
+                          out.print("<option value='" + listaCpu.getString("idCpu") +"'>" 
+                                                      + listaCpu.getString("velocidad") + "</option>");
+                        }
+                      out.print("</select></td>");
+
+                    conexion.close();
+      }        
+                  %>
               </td>
             </tr>
             <tr>

@@ -86,6 +86,9 @@
   <body>
     <header>
       <h1 style="text-align: center; margin-top: 1.1em; z-index: 5;">Mobile analyzer</h1>
+      <h5 style="text-align: center; margin-top: 1.1em; z-index: 5; color: red;">
+        Error, los valores introducidos no son correctos.
+      </h5>
     </header>
       <div class="formularioBusqueda">
         <form action="busquedaResultado.jsp" method="post">
